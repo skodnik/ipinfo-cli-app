@@ -24,7 +24,7 @@ go build -o ./build/ipinfo ipinfo.go
 
 ## Output
 ```shell
-> ./build/ipinfo --ip 8.8.8.                                                                                                                        
+./build/ipinfo --ip 8.8.8.8
 
 8.8.8.8 - AS15169 Google LLC
 US, California, Mountain View
