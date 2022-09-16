@@ -34,7 +34,8 @@ func main() {
 		Version: "1.0.0",
 		Action: func(cCtx *cli.Context) error {
 			ip := cCtx.String("ip")
-			getIpInfo(ip)
+			token := cCtx.String("token")
+			getIpInfo(ip, token)
 			return nil
 		},
 		Flags: []cli.Flag{
@@ -42,6 +43,11 @@ func main() {
 				Name:  "ip",
 				Value: "",
 				Usage: "ip to search",
+			},
+			&cli.StringFlag{
+				Name:  "token",
+				Value: "",
+				Usage: "access token",
 			},
 		},
 	}
@@ -51,18 +57,11 @@ func main() {
 	}
 }
 
-func getIpInfo(ip string) {
-	resp, err := http.Get("https://ipinfo.io/" + ip)
+func getIpInfo(ip, token string) {
+	resp, err := http.Get("https://ipinfo.io/" + ip + "?token=" + token)
 	if err != nil {
 		log.Fatalln(err)
 	}
-
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			log.Fatalln(err)
-		}
-	}(resp.Body)
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -72,6 +71,10 @@ func getIpInfo(ip string) {
 	err = json.Unmarshal(body, &ipData)
 	if err != nil {
 		log.Fatalln(err)
+	}
+
+	if ipData.Ip == "" {
+		log.Fatalln("Incorrect input data, token perhaps?")
 	}
 
 	fmt.Println(color.Ize(color.Green, "\n"+ipData.Ip+" - "+ipData.Org))
