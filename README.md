@@ -32,6 +32,15 @@ go build -o ./build/bin/ipinfo ./cmd/ipinfo/ipinfo.go
 go install ./cmd/ipinfo/ipinfo.go
 ```
 
+This command builds the `ipinfo` command, producing an executable binary. It then installs that binary as
+`$HOME/go/bin/ipinfo` (or, under Windows, `%USERPROFILE%\go\bin\hello.exe`).
+
+You can use the go env command to portably set the default value for an environment variable for future go commands:
+
+```shell
+go env -w GOBIN=/somewhere/else/bin
+```
+
 ## Usage
 
 ```shell
