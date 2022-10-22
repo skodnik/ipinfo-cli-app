@@ -50,7 +50,7 @@ jobs:
                 run: go get ./cmd/ipinfo
 
             -   name: Build application for ${{ matrix.platform }}
-                run: bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }} && rm ./build/bin/.gitignore
+                run: rm -rf ./build/bin/* ; bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }}
 
             -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
                 uses: actions/upload-artifact@v3

@@ -33,7 +33,7 @@ func main() {
 	app := &cli.App{
 		Name:    "ipinfo",
 		Usage:   "get ip information",
-		Version: "1.0.2",
+		Version: "v1.0.3",
 		Action: func(cCtx *cli.Context) error {
 			ip := cCtx.String("ip")
 			token := cCtx.String("token")
