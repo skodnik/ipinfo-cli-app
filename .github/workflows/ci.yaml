@@ -1,6 +1,9 @@
 name: ipinfo tests and build
 
-on: [ push ]
+on:
+    push:
+        tags:
+            - '*'
 
 jobs:
     test:
@@ -59,5 +62,6 @@ jobs:
                 uses: SierraSoftworks/gh-releases@v1.0.4
                 with:
                     token: ${{ secrets.TOKEN }}
+                    tag: 1.0.2
                     overwrite: 'true'
                     files: ./build/bin/
