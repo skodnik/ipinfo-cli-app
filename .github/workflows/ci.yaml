@@ -1,4 +1,4 @@
-name: ipinfo tests
+name: ipinfo tests and build
 
 on: [ push ]
 
@@ -27,3 +27,49 @@ jobs:
                 with:
                     name: Go-results-${{ matrix.go-version }}
                     path: TestResults-${{ matrix.go-version }}.json
+
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   name: Set up Go
+                uses: actions/setup-go@v3
+                with:
+                    go-version: 1.19.1
+
+            -   name: Install dependencies
+                run: go get ./cmd/ipinfo
+
+            -   name: Build
+                run: bash ./build.bash
+
+            -   name: Executable upload
+                uses: actions/upload-artifact@v3
+                with:
+                    name: ipinfo-darwin-amd64
+                    path: ./build/bin/ipinfo-darwin-amd64
+
+            -   name: Executable upload
+                uses: actions/upload-artifact@v3
+                with:
+                    name: ipinfo-darwin-arm64
+                    path: ./build/bin/ipinfo-darwin-arm64
+
+            -   name: Executable upload
+                uses: actions/upload-artifact@v3
+                with:
+                    name: ipinfo-linux-amd64
+                    path: ./build/bin/ipinfo-linux-amd64
+
+            -   name: Executable upload
+                uses: actions/upload-artifact@v3
+                with:
+                    name: ipinfo-windows-386.exe
+                    path: ./build/bin/ipinfo-windows-386.exe
+
+            -   name: Executable upload
+                uses: actions/upload-artifact@v3
+                with:
+                    name: ipinfo-windows-amd64.exe
+                    path: ./build/bin/ipinfo-windows-amd64.exe
