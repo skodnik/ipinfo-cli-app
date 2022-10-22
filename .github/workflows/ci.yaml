@@ -46,19 +46,12 @@ jobs:
             -   name: Install dependencies
                 run: go get ./cmd/ipinfo
 
-            -   name: Build
-                run: FILENAME=$(bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }})
-
-            -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
-                if: matrix.platform == 'windows'
-                uses: actions/upload-artifact@v3
-                with:
-                    name: ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}.exe
-                    path: ./build/bin/ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}.exe
+            -   name: Build application for ${{ matrix.platform }}
+                run: bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }} ; rm ./build/bin/.gitignore
 
             -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
                 if: matrix.platform != 'windows'
                 uses: actions/upload-artifact@v3
                 with:
                     name: ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
-                    path: ./build/bin/ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
+                    path: ./build/bin/
