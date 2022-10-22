@@ -57,11 +57,3 @@ jobs:
                 with:
                     name: ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
                     path: ./build/bin/
-
-            -   name: Release app
-                uses: SierraSoftworks/gh-releases@v1.0.4
-                with:
-                    token: ${{ secrets.TOKEN }}
-                    tag: ${{  github.ref_name }}
-                    overwrite: 'true'
-                    files: ./build/bin/
