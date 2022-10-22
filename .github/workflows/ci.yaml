@@ -62,6 +62,6 @@ jobs:
                 uses: SierraSoftworks/gh-releases@v1.0.4
                 with:
                     token: ${{ secrets.TOKEN }}
-                    tag: 1.0.2
+                    tag: ${{  github.ref_name }}
                     overwrite: 'true'
                     files: ./build/bin/
