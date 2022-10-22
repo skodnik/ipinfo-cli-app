@@ -27,11 +27,13 @@ type ipInfo struct {
 
 var ipData ipInfo
 
+const host = "https://ipinfo.io/"
+
 func main() {
 	app := &cli.App{
 		Name:    "ipinfo",
 		Usage:   "get ip information",
-		Version: "1.0.0",
+		Version: "1.0.1",
 		Action: func(cCtx *cli.Context) error {
 			ip := cCtx.String("ip")
 			token := cCtx.String("token")
@@ -57,21 +59,8 @@ func main() {
 	}
 }
 
-func getIpInfo(ip, token string) {
-	resp, err := http.Get("https://ipinfo.io/" + ip + "?token=" + token)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	err = json.Unmarshal(body, &ipData)
-	if err != nil {
-		log.Fatalln(err)
-	}
+func getIpInfo(ip string, token string) {
+	ipData := getIpData(getBody(makeRequest(ip, token)))
 
 	if ipData.Ip == "" {
 		log.Fatalln("Incorrect input data, token perhaps?")
@@ -79,4 +68,31 @@ func getIpInfo(ip, token string) {
 
 	fmt.Println(color.Ize(color.Green, "\n"+ipData.Ip+" - "+ipData.Org))
 	fmt.Println(color.Ize(color.Green, ipData.Country+", "+ipData.Region+", "+ipData.City))
+}
+
+func makeRequest(ip string, token string) *http.Response {
+	resp, err := http.Get(host + ip + "?token=" + token)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return resp
+}
+
+func getBody(resp *http.Response) []byte {
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return body
+}
+
+func getIpData(body []byte) ipInfo {
+	err := json.Unmarshal(body, &ipData)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return ipData
 }

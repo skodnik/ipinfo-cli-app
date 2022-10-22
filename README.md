@@ -20,16 +20,22 @@ If you have a token, you can specify it.
 go run ./cmd/ipinfo/ipinfo.go --ip 8.8.8.8 --token xxxxxxxxxxxx
 ```
 
+## Integration test
+
+```shell
+make test
+```
+
 ## Build
 
 ```shell
-go build -o ./build/bin/ipinfo ./cmd/ipinfo/ipinfo.go
+make build
 ```
 
 ## Build and install with the go tool
 
 ```shell
-go install ./cmd/ipinfo/ipinfo.go
+make install
 ```
 
 This command builds the `ipinfo` command, producing an executable binary. It then installs that binary as
