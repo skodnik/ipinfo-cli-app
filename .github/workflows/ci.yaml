@@ -53,4 +53,4 @@ jobs:
                 uses: actions/upload-artifact@v3
                 with:
                     name: ${{ matrix.platform }} ${{ matrix.architecture }}
-                    path: FILENAME:= cat filename.txt ; ./build/bin/$FILENAME
+                    path: ./build/bin/
