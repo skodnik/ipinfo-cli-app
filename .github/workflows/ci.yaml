@@ -25,7 +25,7 @@ jobs:
             -   name: Upload Go ${{ matrix.go-version }} test results
                 uses: actions/upload-artifact@v3
                 with:
-                    name: Go-results-${{ matrix.go-version }}
+                    name: test-results-${{ matrix.go-version }}
                     path: TestResults-${{ matrix.go-version }}.json
 
     build:
@@ -47,10 +47,10 @@ jobs:
                 run: go get ./cmd/ipinfo
 
             -   name: Build
-                run: bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }} > filename.txt
+                run: FILENAME=$(bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }})
 
             -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
                 uses: actions/upload-artifact@v3
                 with:
-                    name: ${{ matrix.platform }} ${{ matrix.architecture }}
-                    path: ./build/bin/
+                    name: ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
+                    path: ./build/bin/$FILENAME
