@@ -1,4 +1,4 @@
-name: ipinfo
+name: ipinfo tests
 
 on: [ push ]
 

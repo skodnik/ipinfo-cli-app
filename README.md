@@ -1,3 +1,5 @@
+![integration tests](https://github.com/skodnik/ipinfo-cli-app/actions/workflows/ci.yaml/badge.svg)
+
 # IPinfo cli app
 
 The unofficial [ipinfo.io](https://ipinfo.io) cli app for IP address information.
