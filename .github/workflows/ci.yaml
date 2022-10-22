@@ -50,7 +50,15 @@ jobs:
                 run: FILENAME=$(bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }})
 
             -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
+                if: matrix.platform == 'windows'
+                uses: actions/upload-artifact@v3
+                with:
+                    name: ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}.exe
+                    path: ./build/bin/ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}.exe
+
+            -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
+                if: matrix.platform != 'windows'
                 uses: actions/upload-artifact@v3
                 with:
                     name: ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
-                    path: ./build/bin/${{ FILENAME }}
+                    path: ./build/bin/ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
