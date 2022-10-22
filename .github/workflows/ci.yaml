@@ -50,7 +50,6 @@ jobs:
                 run: bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }} ; rm ./build/bin/.gitignore
 
             -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
-                if: matrix.platform != 'windows'
                 uses: actions/upload-artifact@v3
                 with:
                     name: ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
