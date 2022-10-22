@@ -32,7 +32,8 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                platform: [ 'windows-amd64' 'windows-386' 'darwin-amd64' 'darwin-arm64' 'linux-amd64' ]
+                platform: [ 'windows' 'darwin' 'linux' ]
+                architecture: [ 'amd64', 'arm64' ]
         steps:
             -   uses: actions/checkout@v3
 
@@ -45,10 +46,10 @@ jobs:
                 run: go get ./cmd/ipinfo
 
             -   name: Build
-                run: bash ./build.bash ${{ matrix.platform }}
+                run: bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }}
 
-            -   name: Executable upload ${{ matrix.platform }}
+            -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
                 uses: actions/upload-artifact@v3
                 with:
-                    name: ${{ matrix.platform }}
-                    path: ./build/bin/ipinfo-${{ matrix.platform }}
+                    name: ${{ matrix.platform }}-${{ matrix.architecture }}
+                    path: ./build/bin/ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
