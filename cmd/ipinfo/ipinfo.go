@@ -25,8 +25,6 @@ type ipInfo struct {
 	Readme   string `json:"readme"`
 }
 
-var ipData ipInfo
-
 const host = "https://ipinfo.io/"
 
 func main() {
@@ -121,10 +119,11 @@ func getBody(resp *http.Response) []byte {
 }
 
 func getIpInfo(body []byte) ipInfo {
-	err := json.Unmarshal(body, &ipData)
+	var ipInfo ipInfo
+	err := json.Unmarshal(body, &ipInfo)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	return ipData
+	return ipInfo
 }
