@@ -24,7 +24,7 @@ func Test_getBody(t *testing.T) {
 
 func Test_getIpData(t *testing.T) {
 	body := getBody(makeRequest(testIp, ""))
-	ipData := getIpInfo(body)
+	ipData := convertToIpInfo(body)
 
 	assert.Equal(t, ipData.Ip, testIp)
 }

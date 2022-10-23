@@ -70,7 +70,7 @@ func main() {
 }
 
 func printIpInfo(ip string, token string, jsonb bool, pretty bool) {
-	ipInfo := getIpInfo(getBody(makeRequest(ip, token)))
+	ipInfo := convertToIpInfo(getBody(makeRequest(ip, token)))
 
 	if ipInfo.Ip == "" {
 		log.Fatalln("Incorrect input data, token perhaps?")
@@ -118,7 +118,7 @@ func getBody(resp *http.Response) []byte {
 	return body
 }
 
-func getIpInfo(body []byte) ipInfo {
+func convertToIpInfo(body []byte) ipInfo {
 	var ipInfo ipInfo
 	err := json.Unmarshal(body, &ipInfo)
 	if err != nil {
