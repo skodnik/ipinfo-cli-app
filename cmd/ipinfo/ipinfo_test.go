@@ -22,7 +22,7 @@ func Test_getBody(t *testing.T) {
 	assert.NotEmpty(t, body)
 }
 
-func Test_getIpData(t *testing.T) {
+func Test_convertToIpInfo(t *testing.T) {
 	body := getBody(makeRequest(testIp, ""))
 	ipData := convertToIpInfo(body)
 
