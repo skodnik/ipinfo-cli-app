@@ -6,7 +6,23 @@ The unofficial [ipinfo.io](https://ipinfo.io) cli app for IP address information
 
 ## Usage
 
-### Install
+### Simple way
+
+#### Download for Windows
+
+- [ipinfo-windows-amd64.exe](https://github.com/skodnik/ipinfo-cli-app/raw/main/build/bin/ipinfo-windows-amd64.exe)
+- [ipinfo-windows-386.exe](https://github.com/skodnik/ipinfo-cli-app/raw/main/build/bin/ipinfo-windows-386.exe)
+
+#### Download for Linux
+
+- [ipinfo-linux-amd64](https://github.com/skodnik/ipinfo-cli-app/raw/main/build/bin/ipinfo-linux-amd64)
+
+#### Download for MacOS
+
+- [ipinfo-darwin-arm64](https://github.com/skodnik/ipinfo-cli-app/raw/main/build/bin/ipinfo-darwin-arm64)
+- [ipinfo-darwin-amd64](https://github.com/skodnik/ipinfo-cli-app/raw/main/build/bin/ipinfo-darwin-amd64)
+
+### The hard way - install
 
 ```shell
 git clone git@github.com:skodnik/ipinfo-cli-app.git
