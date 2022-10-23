@@ -4,6 +4,75 @@
 
 The unofficial [ipinfo.io](https://ipinfo.io) cli app for IP address information.
 
+## Usage
+
+### Install
+
+```shell
+git clone git@github.com:skodnik/ipinfo-cli-app.git
+cd ipinfo-cli-app
+make install
+```
+
+### Help
+
+```shell
+ipinfo --help
+
+NAME:
+   ipinfo - get ip information
+
+USAGE:
+   ipinfo [global options] command [command options] [arguments...]
+
+VERSION:
+   v1.0.4
+
+COMMANDS:
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --help, -h     show help (default: false)
+   --ip value     ip to search
+   --json         result to json (default: false)
+   --pretty       prettier json (default: false)
+   --token value  access token
+   --version, -v  print the version (default: false)
+```
+
+### Usage and output
+
+Short-hand.
+
+```shell
+ipinfo --ip 8.8.8.8 --token xxxxxxxxxxxx
+
+8.8.8.8 - AS15169 Google LLC
+US, California, Mountain View
+```
+
+Full information.
+
+```shell
+ipinfo --ip 8.8.8.8 --json --pretty
+  
+{
+    "ip": "8.8.8.8",
+    "hostname": "dns.google",
+    "anycast": true,
+    "city": "Mountain View",
+    "region": "California",
+    "country": "US",
+    "loc": "37.4056,-122.0775",
+    "org": "AS15169 Google LLC",
+    "postal": "94043",
+    "timezone": "America/Los_Angeles",
+    "readme": "https://ipinfo.io/missingauth"
+}
+```
+
+## Developers section
+
 Get information on your actual external IP.
 
 ```shell
@@ -47,21 +116,4 @@ You can use the go env command to portably set the default value for an environm
 
 ```shell
 go env -w GOBIN=/somewhere/else/bin
-```
-
-## Usage
-
-```shell
-ipinfo
-./build/bin/ipinfo --ip 8.8.8.8
-./build/bin/ipinfo --ip 8.8.8.8 --token xxxxxxxxxxxx
-```
-
-## Output
-
-```shell
-./build/bin/ipinfo --ip 8.8.8.8 --token xxxxxxxxxxxx
-
-8.8.8.8 - AS15169 Google LLC
-US, California, Mountain View
 ```

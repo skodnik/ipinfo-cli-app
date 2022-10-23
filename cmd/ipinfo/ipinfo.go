@@ -33,11 +33,13 @@ func main() {
 	app := &cli.App{
 		Name:    "ipinfo",
 		Usage:   "get ip information",
-		Version: "v1.0.3",
+		Version: "v1.0.4",
 		Action: func(cCtx *cli.Context) error {
 			ip := cCtx.String("ip")
 			token := cCtx.String("token")
-			getIpInfo(ip, token)
+			jsonb := cCtx.Bool("json")
+			pretty := cCtx.Bool("pretty")
+			getIpInfo(ip, token, jsonb, pretty)
 			return nil
 		},
 		Flags: []cli.Flag{
@@ -51,6 +53,16 @@ func main() {
 				Value: "",
 				Usage: "access token",
 			},
+			&cli.BoolFlag{
+				Name:  "json",
+				Value: false,
+				Usage: "result to json",
+			},
+			&cli.BoolFlag{
+				Name:  "pretty",
+				Value: false,
+				Usage: "prettier json",
+			},
 		},
 	}
 
@@ -59,11 +71,31 @@ func main() {
 	}
 }
 
-func getIpInfo(ip string, token string) {
+func getIpInfo(ip string, token string, jsonb bool, pretty bool) {
 	ipData := getIpData(getBody(makeRequest(ip, token)))
 
 	if ipData.Ip == "" {
 		log.Fatalln("Incorrect input data, token perhaps?")
+	}
+
+	if jsonb {
+		if pretty {
+			marshal, err := json.MarshalIndent(ipData, "", "    ")
+			if err != nil {
+				return
+			}
+			fmt.Println(string(marshal))
+
+			return
+		}
+
+		marshal, err := json.Marshal(ipData)
+		if err != nil {
+			return
+		}
+		fmt.Println(string(marshal))
+
+		return
 	}
 
 	fmt.Println(color.Ize(color.Green, "\n"+ipData.Ip+" - "+ipData.Org))
