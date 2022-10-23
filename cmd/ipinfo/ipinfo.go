@@ -39,7 +39,7 @@ func main() {
 			token := cCtx.String("token")
 			jsonb := cCtx.Bool("json")
 			pretty := cCtx.Bool("pretty")
-			getIpInfo(ip, token, jsonb, pretty)
+			printIpInfo(ip, token, jsonb, pretty)
 			return nil
 		},
 		Flags: []cli.Flag{
@@ -71,16 +71,16 @@ func main() {
 	}
 }
 
-func getIpInfo(ip string, token string, jsonb bool, pretty bool) {
-	ipData := getIpData(getBody(makeRequest(ip, token)))
+func printIpInfo(ip string, token string, jsonb bool, pretty bool) {
+	ipInfo := getIpInfo(getBody(makeRequest(ip, token)))
 
-	if ipData.Ip == "" {
+	if ipInfo.Ip == "" {
 		log.Fatalln("Incorrect input data, token perhaps?")
 	}
 
 	if jsonb {
 		if pretty {
-			marshal, err := json.MarshalIndent(ipData, "", "    ")
+			marshal, err := json.MarshalIndent(ipInfo, "", "    ")
 			if err != nil {
 				return
 			}
@@ -89,7 +89,7 @@ func getIpInfo(ip string, token string, jsonb bool, pretty bool) {
 			return
 		}
 
-		marshal, err := json.Marshal(ipData)
+		marshal, err := json.Marshal(ipInfo)
 		if err != nil {
 			return
 		}
@@ -98,8 +98,8 @@ func getIpInfo(ip string, token string, jsonb bool, pretty bool) {
 		return
 	}
 
-	fmt.Println(color.Ize(color.Green, "\n"+ipData.Ip+" - "+ipData.Org))
-	fmt.Println(color.Ize(color.Green, ipData.Country+", "+ipData.Region+", "+ipData.City))
+	fmt.Println(color.Ize(color.Green, "\n"+ipInfo.Ip+" - "+ipInfo.Org))
+	fmt.Println(color.Ize(color.Green, ipInfo.Country+", "+ipInfo.Region+", "+ipInfo.City))
 }
 
 func makeRequest(ip string, token string) *http.Response {
@@ -120,7 +120,7 @@ func getBody(resp *http.Response) []byte {
 	return body
 }
 
-func getIpData(body []byte) ipInfo {
+func getIpInfo(body []byte) ipInfo {
 	err := json.Unmarshal(body, &ipData)
 	if err != nil {
 		log.Fatalln(err)
