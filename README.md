@@ -42,7 +42,7 @@ USAGE:
    ipinfo [global options] command [command options] [arguments...]
 
 VERSION:
-   v1.0.7
+   v1.0.9
 
 COMMANDS:
    help, h  Shows a list of commands or help for one command
