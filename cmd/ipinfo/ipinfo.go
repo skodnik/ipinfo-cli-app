@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 )
 
@@ -143,12 +144,14 @@ func printIpInfo(ip string, token string, jsonb bool, pretty bool) {
 }
 
 func makeRequest(ip string, token string) *http.Response {
-	resp, err := http.Get(host + ip + "?token=" + token)
+	params := url.Values{}
+	params.Add("token", token)
+	response, err := http.Get(host + ip + "?" + params.Encode())
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	return resp
+	return response
 }
 
 func getBody(resp *http.Response) []byte {
