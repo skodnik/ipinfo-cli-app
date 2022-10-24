@@ -5,6 +5,7 @@ package main
 
 import (
 	"github.com/stretchr/testify/assert"
+	"io/ioutil"
 	"testing"
 )
 
@@ -24,6 +25,13 @@ func Test_getBody(t *testing.T) {
 
 func Test_convertToIpInfo(t *testing.T) {
 	body := getBody(makeRequest(testIp, ""))
+	ipData := convertToIpInfo(body)
+
+	assert.Equal(t, ipData.Ip, testIp)
+}
+
+func Test_convertToIpInfoWithSample(t *testing.T) {
+	body, _ := ioutil.ReadFile("./../../test/sample-response.json")
 	ipData := convertToIpInfo(body)
 
 	assert.Equal(t, ipData.Ip, testIp)
