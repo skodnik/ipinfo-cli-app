@@ -13,7 +13,7 @@ import (
 	"os"
 )
 
-type rich struct {
+type richIpInfo struct {
 	Input string `json:"input"`
 	Data  ipInfo `json:"data"`
 }
@@ -30,14 +30,14 @@ type ipInfo struct {
 	Postal   string  `json:"postal"`
 	Timezone string  `json:"timezone"`
 	Readme   string  `json:"readme"`
-	Asn      Asn     `json:"asn,omitempty"`
-	Company  Company `json:"company,omitempty"`
-	Privacy  Privacy `json:"privacy,omitempty"`
-	Abuse    Abuse   `json:"abuse,omitempty"`
-	Domains  Domains `json:"domains,omitempty"`
+	Asn      asn     `json:"asn,omitempty"`
+	Company  company `json:"company,omitempty"`
+	Privacy  privacy `json:"privacy,omitempty"`
+	Abuse    abuse   `json:"abuse,omitempty"`
+	Domains  domains `json:"domains,omitempty"`
 }
 
-type Asn struct {
+type asn struct {
 	Asn    string `json:"asn,omitempty"`
 	Name   string `json:"name,omitempty"`
 	Domain string `json:"domain,omitempty"`
@@ -45,7 +45,7 @@ type Asn struct {
 	Type   string `json:"type,omitempty"`
 }
 
-type Privacy struct {
+type privacy struct {
 	Vpn     bool   `json:"vpn,omitempty"`
 	Proxy   bool   `json:"proxy,omitempty"`
 	Tor     bool   `json:"tor,omitempty"`
@@ -54,7 +54,7 @@ type Privacy struct {
 	Service string `json:"service,omitempty"`
 }
 
-type Abuse struct {
+type abuse struct {
 	Address string `json:"address,omitempty"`
 	Country string `json:"country,omitempty"`
 	Email   string `json:"email,omitempty"`
@@ -63,13 +63,13 @@ type Abuse struct {
 	Phone   string `json:"phone,omitempty"`
 }
 
-type Company struct {
+type company struct {
 	Name   string `json:"name,omitempty"`
 	Domain string `json:"domain,omitempty"`
 	Type   string `json:"type,omitempty"`
 }
 
-type Domains struct {
+type domains struct {
 	Total   int           `json:"total,omitempty"`
 	Domains []interface{} `json:"domains,omitempty"`
 }
@@ -218,7 +218,7 @@ func convertToIpInfo(body []byte) ipInfo {
 }
 
 func convertToIpInfoSly(body []byte) ipInfo {
-	var richIpInfo rich
+	var richIpInfo richIpInfo
 	err := json.Unmarshal(body, &richIpInfo)
 	if err != nil {
 		log.Printf("Response: %s\n", string(body))
