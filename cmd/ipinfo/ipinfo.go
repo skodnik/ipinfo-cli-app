@@ -8,9 +8,15 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"os"
 )
+
+type rich struct {
+	Input string `json:"input"`
+	Data  ipInfo `json:"data"`
+}
 
 type ipInfo struct {
 	Ip       string  `json:"ip"`
@@ -69,18 +75,20 @@ type Domains struct {
 }
 
 const host = "https://ipinfo.io/"
+const hostAlt = "https://ipinfo.io/widget/demo/"
 
 func main() {
 	app := &cli.App{
 		Name:    "ipinfo",
 		Usage:   "get ip information",
-		Version: "v1.0.5",
+		Version: "v1.0.6",
 		Action: func(cCtx *cli.Context) error {
 			ip := cCtx.String("ip")
 			token := cCtx.String("token")
 			jsonb := cCtx.Bool("json")
 			pretty := cCtx.Bool("pretty")
-			printIpInfo(ip, token, jsonb, pretty)
+			sly := cCtx.Bool("sly")
+			printIpInfo(ip, token, jsonb, pretty, sly)
 			return nil
 		},
 		Flags: []cli.Flag{
@@ -104,6 +112,11 @@ func main() {
 				Value: false,
 				Usage: "prettier json",
 			},
+			&cli.BoolFlag{
+				Name:  "sly",
+				Value: false,
+				Usage: "rich info without token",
+			},
 		},
 	}
 
@@ -112,8 +125,16 @@ func main() {
 	}
 }
 
-func printIpInfo(ip string, token string, jsonb bool, pretty bool) {
-	ipInfo := convertToIpInfo(getBody(makeRequest(ip, token)))
+func printIpInfo(ip string, token string, jsonb bool, pretty bool, sly bool) {
+	ipInfo := ipInfo{}
+	if sly {
+		if ip == "" {
+			log.Fatalln("Are you sure you're a sly?")
+		}
+		ipInfo = convertToIpInfoSly(getBody(makeRequestSly(ip, token)))
+	} else {
+		ipInfo = convertToIpInfo(getBody(makeRequest(ip, token)))
+	}
 
 	if ipInfo.Ip == "" {
 		log.Fatalln("Incorrect input data, token perhaps?")
@@ -126,7 +147,6 @@ func printIpInfo(ip string, token string, jsonb bool, pretty bool) {
 				return
 			}
 			fmt.Println(string(marshal))
-
 			return
 		}
 
@@ -135,7 +155,6 @@ func printIpInfo(ip string, token string, jsonb bool, pretty bool) {
 			return
 		}
 		fmt.Println(string(marshal))
-
 		return
 	}
 
@@ -154,10 +173,34 @@ func makeRequest(ip string, token string) *http.Response {
 	return response
 }
 
+func makeRequestSly(ip string, token string) *http.Response {
+	params := url.Values{}
+	params.Add("token", token)
+	client := &http.Client{}
+	request, err := http.NewRequest("GET", hostAlt+ip, nil)
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Referer", "https://ipinfo.io/")
+	request.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36")
+	response, err := client.Do(request)
+	if err != nil {
+		request, err := httputil.DumpRequestOut(request, true)
+		log.Printf("Request: %s\n", string(request))
+		log.Fatalln(err)
+	}
+
+	return response
+}
+
 func getBody(resp *http.Response) []byte {
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Response: %s\n", string(body))
 		log.Fatalln(err)
+	}
+
+	if resp.StatusCode != 200 {
+		log.Printf("Response [%d]: %s\n", resp.StatusCode, string(body))
+		log.Fatalf("http error")
 	}
 
 	return body
@@ -167,8 +210,20 @@ func convertToIpInfo(body []byte) ipInfo {
 	var ipInfo ipInfo
 	err := json.Unmarshal(body, &ipInfo)
 	if err != nil {
+		log.Printf("Response: %s\n", string(body))
 		log.Fatalln(err)
 	}
 
 	return ipInfo
+}
+
+func convertToIpInfoSly(body []byte) ipInfo {
+	var richIpInfo rich
+	err := json.Unmarshal(body, &richIpInfo)
+	if err != nil {
+		log.Printf("Response: %s\n", string(body))
+		log.Fatalln(err)
+	}
+
+	return richIpInfo.Data
 }

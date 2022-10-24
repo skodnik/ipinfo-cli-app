@@ -33,8 +33,6 @@ make install
 ### Help
 
 ```shell
-ipinfo --help
-
 NAME:
    ipinfo - get ip information
 
@@ -42,7 +40,7 @@ USAGE:
    ipinfo [global options] command [command options] [arguments...]
 
 VERSION:
-   v1.0.4
+   v1.0.6
 
 COMMANDS:
    help, h  Shows a list of commands or help for one command
@@ -52,6 +50,7 @@ GLOBAL OPTIONS:
    --ip value     ip to search
    --json         result to json (default: false)
    --pretty       prettier json (default: false)
+   --sly          rich info without token (default: false)
    --token value  access token
    --version, -v  print the version (default: false)
 ```
@@ -84,6 +83,64 @@ ipinfo --ip 8.8.8.8 --json --pretty
     "postal": "94043",
     "timezone": "America/Los_Angeles",
     "readme": "https://ipinfo.io/missingauth"
+}
+```
+
+Rich full information with `--sly` flag (**experimental option**).
+
+```shell
+ipinfo --ip 8.8.8.8 --sly --json -pretty
+
+{
+    "ip": "8.8.8.8",
+    "hostname": "dns.google",
+    "anycast": true,
+    "city": "Mountain View",
+    "region": "California",
+    "country": "US",
+    "loc": "37.4056,-122.0775",
+    "org": "AS15169 Google LLC",
+    "postal": "94043",
+    "timezone": "America/Los_Angeles",
+    "asn": {
+        "asn": "AS15169",
+        "name": "Google LLC",
+        "domain": "google.com",
+        "route": "8.8.8.0/24",
+        "type": "hosting"
+    },
+    "company": {
+        "name": "Google LLC",
+        "domain": "google.com",
+        "type": "hosting"
+    },
+    "privacy": {
+        "vpn": false,
+        "proxy": false,
+        "tor": false,
+        "relay": false,
+        "hosting": true,
+        "service": ""
+    },
+    "abuse": {
+        "address": "US, CA, Mountain View, 1600 Amphitheatre Parkway, 94043",
+        "country": "US",
+        "email": "network-abuse@google.com",
+        "name": "Abuse",
+        "network": "8.8.8.0/24",
+        "phone": "+1-650-253-0000"
+    },
+    "domains": {
+        "ip": "8.8.8.8",
+        "total": 13685,
+        "domains": [
+            "aonode.com",
+            "000180.top",
+            "chaoxz.com",
+            "dns.google",
+            "server-panel.net"
+        ]
+    }
 }
 ```
 
