@@ -74,21 +74,23 @@ type domains struct {
 	Domains []interface{} `json:"domains,omitempty"`
 }
 
-const host = "https://ipinfo.io/"
-const hostAlt = "https://ipinfo.io/widget/demo/"
+var host = "https://ipinfo.io/"
+var hostAlt = "https://ip.zxq.co/"
+var hostSly = "https://ipinfo.io/widget/demo/"
 
 func main() {
 	app := &cli.App{
 		Name:    "ipinfo",
 		Usage:   "get ip information",
-		Version: "v1.0.6",
+		Version: "v1.0.7",
 		Action: func(cCtx *cli.Context) error {
 			ip := cCtx.String("ip")
 			token := cCtx.String("token")
 			jsonb := cCtx.Bool("json")
 			pretty := cCtx.Bool("pretty")
 			sly := cCtx.Bool("sly")
-			printIpInfo(ip, token, jsonb, pretty, sly)
+			alt := cCtx.Bool("alt")
+			printIpInfo(ip, token, jsonb, pretty, sly, alt)
 			return nil
 		},
 		Flags: []cli.Flag{
@@ -115,7 +117,12 @@ func main() {
 			&cli.BoolFlag{
 				Name:  "sly",
 				Value: false,
-				Usage: "rich info without token",
+				Usage: "rich info without token (only main host)",
+			},
+			&cli.BoolFlag{
+				Name:  "alt",
+				Value: false,
+				Usage: "use an alternative host ip.zxq.co",
 			},
 		},
 	}
@@ -125,7 +132,7 @@ func main() {
 	}
 }
 
-func printIpInfo(ip string, token string, jsonb bool, pretty bool, sly bool) {
+func printIpInfo(ip string, token string, jsonb bool, pretty bool, sly bool, alt bool) {
 	ipInfo := ipInfo{}
 	if sly {
 		if ip == "" {
@@ -133,7 +140,7 @@ func printIpInfo(ip string, token string, jsonb bool, pretty bool, sly bool) {
 		}
 		ipInfo = convertToIpInfoSly(getBody(makeRequestSly(ip, token)))
 	} else {
-		ipInfo = convertToIpInfo(getBody(makeRequest(ip, token)))
+		ipInfo = convertToIpInfo(getBody(makeRequest(ip, token, alt)))
 	}
 
 	if ipInfo.Ip == "" {
@@ -162,9 +169,12 @@ func printIpInfo(ip string, token string, jsonb bool, pretty bool, sly bool) {
 	fmt.Println(color.Ize(color.Green, ipInfo.Country+", "+ipInfo.Region+", "+ipInfo.City))
 }
 
-func makeRequest(ip string, token string) *http.Response {
+func makeRequest(ip string, token string, alt bool) *http.Response {
 	params := url.Values{}
 	params.Add("token", token)
+	if alt {
+		host = hostAlt
+	}
 	response, err := http.Get(host + ip + "?" + params.Encode())
 	if err != nil {
 		log.Fatalln(err)
@@ -177,7 +187,7 @@ func makeRequestSly(ip string, token string) *http.Response {
 	params := url.Values{}
 	params.Add("token", token)
 	client := &http.Client{}
-	request, err := http.NewRequest("GET", hostAlt+ip, nil)
+	request, err := http.NewRequest("GET", hostSly+ip, nil)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Referer", "https://ipinfo.io/")
 	request.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36")

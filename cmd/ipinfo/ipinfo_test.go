@@ -12,19 +12,19 @@ import (
 const testIp = "8.8.8.8"
 
 func Test_makeRequest(t *testing.T) {
-	resp := makeRequest(testIp, "")
+	resp := makeRequest(testIp, "", false)
 
 	assert.Equal(t, 200, resp.StatusCode)
 }
 
 func Test_getBody(t *testing.T) {
-	body := getBody(makeRequest(testIp, ""))
+	body := getBody(makeRequest(testIp, "", false))
 
 	assert.NotEmpty(t, body)
 }
 
 func Test_convertToIpInfo(t *testing.T) {
-	body := getBody(makeRequest(testIp, ""))
+	body := getBody(makeRequest(testIp, "", false))
 	ipData := convertToIpInfo(body)
 
 	assert.Equal(t, ipData.Ip, testIp)

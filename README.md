@@ -33,6 +33,8 @@ make install
 ### Help
 
 ```shell
+ipinfo --help
+
 NAME:
    ipinfo - get ip information
 
@@ -40,19 +42,21 @@ USAGE:
    ipinfo [global options] command [command options] [arguments...]
 
 VERSION:
-   v1.0.6
+   v1.0.7
 
 COMMANDS:
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
+   --alt          use an alternative host ip.zxq.co (default: false)
    --help, -h     show help (default: false)
    --ip value     ip to search
    --json         result to json (default: false)
    --pretty       prettier json (default: false)
-   --sly          rich info without token (default: false)
+   --sly          rich info without token (only main host) (default: false)
    --token value  access token
    --version, -v  print the version (default: false)
+
 ```
 
 ### Usage and output
