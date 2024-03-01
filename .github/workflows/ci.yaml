@@ -2,8 +2,7 @@ name: ipinfo tests and build
 
 on:
     push:
-        tags:
-            - '*'
+        branches: [ "main" ]
 
 jobs:
     test:
