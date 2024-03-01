@@ -11,10 +11,10 @@ jobs:
             matrix:
                 go-version: [ '1.17.x', '1.18.x', '1.19.x', '1.20.x', '1.21.x', '1.22.x' ]
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Set up Go ${{ matrix.go-version }}
-                uses: actions/setup-go@v3
+                uses: actions/setup-go@v4
                 with:
                     go-version: ${{ matrix.go-version }}
 
@@ -25,7 +25,7 @@ jobs:
                 run: go test -tags integration -json -v ./... > TestResults-${{ matrix.go-version }}.json
 
             -   name: Upload Go ${{ matrix.go-version }} test results
-                uses: actions/upload-artifact@v3
+                uses: actions/upload-artifact@v4
                 with:
                     name: test-results-${{ matrix.go-version }}
                     path: TestResults-${{ matrix.go-version }}.json
@@ -38,10 +38,10 @@ jobs:
                 platform: [ 'windows', 'darwin', 'linux' ]
                 architecture: [ 'amd64', 'arm64' ]
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
 
             -   name: Set up Go
-                uses: actions/setup-go@v3
+                uses: actions/setup-go@v4
                 with:
                     go-version: 1.19.1
 
@@ -52,7 +52,7 @@ jobs:
                 run: rm -rf ./build/bin/* ; bash ./build.bash ${{ matrix.platform }}-${{ matrix.architecture }}
 
             -   name: Executable upload ${{ matrix.platform }}-${{ matrix.architecture }}
-                uses: actions/upload-artifact@v3
+                uses: actions/upload-artifact@v4
                 with:
                     name: ipinfo-${{ matrix.platform }}-${{ matrix.architecture }}
                     path: ./build/bin/
